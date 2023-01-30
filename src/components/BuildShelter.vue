@@ -1,0 +1,42 @@
+<template>
+  <div>
+    <div v-if="health > 0">
+      <button v-if="canBuild" @click="build()">Build Shelter</button>
+      <div v-else>You do not have enough resources to build a shelter.</div>
+      <div>Progress: {{ shelterProgress }}%</div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { useGame } from "../stores/useGame";
+
+export default {
+  setup() {
+    const { buildShelter, resources, shelter, health } = useGame();
+    return {
+      buildShelter,
+      resources,
+      shelter,
+      health,
+    };
+  },
+  computed: {
+    canBuild() {
+      return this.resources.wood >= 10 && this.resources.stone >= 5;
+    },
+    shelterProgress() {
+      return this.shelter.shelterProgress;
+    },
+
+    health() {
+      return this.health.playerHealth;
+    },
+  },
+  methods: {
+    build() {
+      this.buildShelter();
+    },
+  },
+};
+</script>

@@ -1,17 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <ResourceCounter />
+    <GatherResources />
+    <BuildShelter />
+    <HealthTracker />
+    <HealPlayer />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
+import ResourceCounter from "./components/ResourceCounter.vue";
+import GatherResources from "./components/GatherResources.vue";
+import BuildShelter from "./components/BuildShelter.vue";
+import HealthTracker from "./components/HealthTracker.vue";
+import HealPlayer from "./components/HealPlayer.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    HelloWorld,
+    ResourceCounter,
+    GatherResources,
+    BuildShelter,
+    HealthTracker,
+    HealPlayer,
+  },
+};
 </script>
 
 <style>
@@ -24,3 +40,4 @@ export default {
   margin-top: 60px;
 }
 </style>
+
