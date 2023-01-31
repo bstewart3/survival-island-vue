@@ -4,9 +4,9 @@ export const useGame = defineStore({
   id: "game",
   state: () => ({
     resources: {
-      wood: 40,
-      stone: 20,
-      food: 40,
+      wood: 6,
+      stone: 2,
+      food: 4,
     },
     shelter: {
       shelterBuilt: false,

@@ -24,7 +24,6 @@ export default {
   },
   created() {
     const { checkForStory, story } = useGame();
-
     setInterval(() => {
       checkForStory();
     }, 100);
