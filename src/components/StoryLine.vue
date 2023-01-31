@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     gameIndex() {
-      console.log(this.story.currentStoryIndex);
+      //   console.log(this.story.currentStoryIndex);
       return this.story.currentStoryIndex;
     },
   },

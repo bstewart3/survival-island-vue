@@ -1,7 +1,8 @@
 <template>
   <div>
     <ResourceCounter />
-    <StoryLines />
+    <!-- <StoryLines /> -->
+    <IntroMessage />
     <GatherResources />
     <BuildShelter />
     <HealthTracker />
@@ -23,7 +24,8 @@ import TimeTracker from "./components/TimeTracker.vue";
 import ToolCreator from "./components/ToolCreator.vue";
 import DangerHandler from "./components/DangerHandler.vue";
 import Exploration from "./components/Exploration.vue";
-import StoryLines from "./components/StoryLine.vue";
+// import StoryLines from "./components/StoryLine.vue";
+import IntroMessage from "./components/introMessage.vue";
 
 export default {
   name: "App",
@@ -37,7 +39,8 @@ export default {
     ToolCreator,
     DangerHandler,
     Exploration,
-    StoryLines,
+    // StoryLines,
+    IntroMessage,
   },
 };
 </script>
