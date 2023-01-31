@@ -1,8 +1,8 @@
 <template>
   <div v-if="health > 0">
-    <button v-if="canGather" @click="gather('wood', 4)">Gather Wood</button>
-    <button v-if="canGather" @click="gather('stone', 4)">Gather Stone</button>
-    <button v-if="canGather" @click="gather('food', 4)">Gather Food</button>
+    <button v-if="canGather" @click="gather('wood', 1)">Gather Wood</button>
+    <button v-if="canGather" @click="gather('stone', 1)">Gather Stone</button>
+    <button v-if="canGather" @click="gather('food', 2)">Gather Food</button>
     <div v-else>You cannot gather resources right now.</div>
   </div>
 </template>
@@ -12,8 +12,8 @@ import { useGame } from "../stores/useGame";
 
 export default {
   setup() {
-    const { gatherResources, health } = useGame();
-    return { gatherResources, health };
+    const { gatherResources, health, userTools } = useGame();
+    return { gatherResources, health, userTools };
   },
   computed: {
     canGather() {
@@ -21,6 +21,9 @@ export default {
     },
     health() {
       return this.health.playerHealth;
+    },
+    userTools() {
+      return this.userTools;
     },
   },
   methods: {

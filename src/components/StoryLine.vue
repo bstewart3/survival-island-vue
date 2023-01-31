@@ -14,14 +14,7 @@ export default {
   setup() {
     const { story, storyLines, advanceStory } = useGame();
     const currentStoryLine = [story.storyLines[story.currentStoryIndex]];
-
-    function incNum(num) {
-      setInterval(() => {
-        num + 1;
-      }, 1000);
-      return console.log(num);
-    }
-    incNum(1);
+    console.log(story.currentStoryIndex);
     // setInterval(() => {
     //   advanceStory();
     // }, 1000);

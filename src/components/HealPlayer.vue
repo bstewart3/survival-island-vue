@@ -1,6 +1,9 @@
 <template>
   <div>
-    <button v-if="health > 0" @click="eatFood">Eat Food</button>
+    <button v-if="health > 0 && this.resources.food > 0" @click="eatFood">
+      Eat Food
+    </button>
+    <div v-if="this.resources.food === 0">You have no food to eat</div>
   </div>
 </template>
 
@@ -14,7 +17,7 @@ export default {
   },
   methods: {
     eatFood() {
-      const randomNumber = Math.floor(Math.random() * 10);
+      const randomNumber = Math.floor(Math.random() * 25);
       if (this.resources.food > 0) {
         this.healHealth(randomNumber);
         this.resources.food--;

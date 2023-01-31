@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div v-if="health > 0">
+    <p v-if="shelterProgress >= 100">You have built a shelter</p>
+    <div v-if="health > 0 && shelterProgress < 100">
       <button v-if="canBuild" @click="build()">Build Shelter</button>
+
       <div v-else>You do not have enough resources to build a shelter.</div>
       <div>Progress: {{ shelterProgress }}%</div>
     </div>
