@@ -36,12 +36,11 @@ export const useGame = defineStore({
       dangerFound: false,
     },
     story: {
-      storyLines: [
-        "You find yourself stranded on a deserted island.",
-        "You must gather resources to survive and build a shelter.",
-        "Be careful, there are dangers on the island that can harm you.",
-      ],
+      storyLines: [],
       currentStoryIndex: 0,
+      currentMessage: [],
+      updatedIndex: 0,
+      showMessage: true,
     },
 
     userTools: [],
@@ -51,6 +50,7 @@ export const useGame = defineStore({
   }),
 
   actions: {
+    //Action to gather resources
     gatherResources(resource, amount) {
       const hasAxe = this.userTools.filter((tool) => tool === "Axe");
       const hasFishingRod = this.userTools.filter(
@@ -70,6 +70,15 @@ export const useGame = defineStore({
       }
 
       this.resources[resource] += amount;
+      this.story.storyLines.pop();
+      this.story.updatedIndex++;
+      this.story.showMessage = true;
+      this.story.storyLines.push("You gathered some" + " " + resource);
+      setInterval(() => {
+        this.story.showMessage = false;
+      }, 4000);
+
+      console.log(this.story.storyLines);
       this.tick();
     },
     useResources(resource, amount) {
@@ -156,6 +165,16 @@ export const useGame = defineStore({
         this.danger.dangerOccurred = false;
       }
       console.log(this.danger.dangers);
+    },
+    checkForStory() {
+      const messages = this.story.storyLines;
+
+      this.story.currentStoryIndex++;
+
+      if (this.story.currentStoryIndex >= messages.length) {
+        this.story.currentStoryIndex = 0;
+      }
+      this.story.currentMessage = messages[this.story.currentStoryIndex];
     },
 
     addDiscovery(discovery) {

@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p v-if="dangerOccurred">A {{ dangers }} has occurred!</p>
-    <p v-else>No danger at this time!</p>
+    <transition-group name="danger" tag="div">
+      <p v-if="dangerOccurred">A {{ dangers }} has occurred!</p>
+      <p v-else>No danger at this time!</p>
+    </transition-group>
   </div>
 </template>
 
@@ -23,9 +25,21 @@ export default {
   },
   created() {
     const { checkForDanger } = useGame();
+    let randomNumber = Math.floor(Math.random() * (95000 - 35000 + 1)) + 35000;
     setInterval(() => {
       checkForDanger();
     }, 30000);
   },
 };
 </script>
+<style scoped>
+.danger-enter-active,
+.danger-leave-active {
+  transition: all 0.5s ease-out;
+}
+.danger-enter-from,
+.danger-leave-to {
+  opacity: 0;
+  transform: translateX(40px);
+}
+</style>

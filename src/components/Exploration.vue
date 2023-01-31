@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="explore">Explore</button>
+    <button @click="explore">Explore The Island</button>
     <p v-if="newResourceFound">You found a new resource!</p>
     <p v-if="otherSurvivorFound">You found another survivor!</p>
     <p v-if="dangerFound">You we're injured while exploring</p>

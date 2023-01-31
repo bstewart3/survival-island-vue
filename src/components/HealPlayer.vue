@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="button">
     <button v-if="health > 0 && this.resources.food > 0" @click="eatFood">
       Eat Food
     </button>
@@ -33,3 +33,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.button{
+  display: inline;
+}
+</style>
