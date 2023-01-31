@@ -4,9 +4,9 @@ export const useGame = defineStore({
   id: "game",
   state: () => ({
     resources: {
-      wood: 4,
-      stone: 2,
-      food: 4,
+      wood: 40,
+      stone: 20,
+      food: 40,
     },
     shelter: {
       shelterBuilt: false,
@@ -74,9 +74,6 @@ export const useGame = defineStore({
       this.story.updatedIndex++;
       this.story.showMessage = true;
       this.story.storyLines.push("You gathered some" + " " + resource);
-      setInterval(() => {
-        this.story.showMessage = false;
-      }, 4000);
 
       console.log(this.story.storyLines);
       this.tick();
@@ -87,18 +84,27 @@ export const useGame = defineStore({
     discoverNewResource() {
       this.exploration.newResourceFound = true;
       this.tick();
+      this.story.showMessage = true;
+      this.story.storyLines.pop();
+      this.story.storyLines.push("You found a new resource");
       console.log("resource found ==>", this.exploration.newResourceFound);
     },
     discoverOtherSurvivor() {
       this.exploration.otherSurvivorFound = true;
       this.survivors++;
       this.tick();
+      this.story.showMessage = true;
+      this.story.storyLines.pop();
+      this.story.storyLines.push("You found a survivor");
       console.log("Survivor Found ==>", this.exploration.otherSurvivorFound);
     },
     discoverDanger() {
       this.exploration.dangerFound = true;
       this.damageHealth(15);
       this.tick();
+      this.story.showMessage = true;
+      this.story.storyLines.pop();
+      this.story.storyLines.push("You we're injured while exploring");
       console.log("Danger Found ==>", this.exploration.dangerFound);
     },
     advanceStory() {

@@ -23,11 +23,14 @@ export default {
     },
   },
   created() {
-    const { checkForStory } = useGame();
+    const { checkForStory, story } = useGame();
 
     setInterval(() => {
       checkForStory();
     }, 100);
+    setInterval(() => {
+      story.showMessage = false;
+    }, 15000);
   },
 
   setup() {

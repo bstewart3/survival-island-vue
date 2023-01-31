@@ -1,23 +1,28 @@
 <template>
   <div>
     <TimeTracker />
+    <DangerHandler />
     <ResourceCounter />
+    <div class="toolTracker">
+      <ToolTracker />
+    </div>
     <div class="healthTracker">
       <HealthTracker />
     </div>
     <div class="healPlayer">
       <HealPlayer />
     </div>
-
-    <StoryLines />
     <IntroMessage />
+    <div class="storyLines">
+      <StoryLines />
+    </div>
 
     <PlayerControls />
     <!-- <GatherResources /> -->
     <!-- <BuildShelter /> -->
 
     <!-- <ToolCreator /> -->
-    <DangerHandler />
+
     <!-- <Exploration /> -->
   </div>
 </template>
@@ -35,6 +40,7 @@ import DangerHandler from "./components/DangerHandler.vue";
 import StoryLines from "./components/StoryLine.vue";
 import IntroMessage from "./components/introMessage.vue";
 import PlayerControls from "./components/PlayerControls.vue";
+import ToolTracker from "./components/ToolTracker.vue";
 
 export default {
   name: "App",
@@ -51,6 +57,7 @@ export default {
     StoryLines,
     IntroMessage,
     PlayerControls,
+    ToolTracker,
   },
 };
 </script>
@@ -73,6 +80,12 @@ export default {
   display: flex;
   align-items: flex-start;
   padding-left: 1.5rem;
+}
+.storyLines {
+  padding-bottom: 50px;
+}
+.toolTracker {
+  padding: 1.5rem;
 }
 </style>
 
