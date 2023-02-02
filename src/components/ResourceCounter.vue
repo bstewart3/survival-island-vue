@@ -38,3 +38,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.survivorCounter {
+  display: flex;
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+}
+</style>

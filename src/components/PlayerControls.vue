@@ -1,37 +1,39 @@
 <template>
   <transition-group name="controls">
     <div v-if="introIsFinished">
-      <div>What would you like to do?</div>
-      <div class="buttons">
-        <button
-          v-if="!isGathering || !isBuilding || !isExploring"
-          @click="isCurrentlyGathering"
-        >
-          Gather
-        </button>
-        <button
-          v-if="!isGathering || !isBuilding || !isExploring"
-          @click="isCurrentlyExploring"
-        >
-          Explore
-        </button>
-        <button
-          v-if="!isGathering || !isBuilding || !isExploring"
-          @click="isCurrentlyBuilding"
-        >
-          Build
-        </button>
-        <!-- <HealPlayer /> -->
-      </div>
-      <div v-if="isBuilding">
-        <BuildShelter />
-        <ToolCreator />
-      </div>
-      <div v-if="isGathering">
-        <GatherResources />
-      </div>
-      <div v-if="isExploring">
-        <Exploration />
+      <div>
+        <div>What would you like to do?</div>
+        <div class="buttons">
+          <button
+            v-if="!isGathering || !isBuilding || !isExploring"
+            @click="isCurrentlyGathering"
+          >
+            Gather
+          </button>
+          <button
+            v-if="!isGathering || !isBuilding || !isExploring"
+            @click="isCurrentlyExploring"
+          >
+            Explore
+          </button>
+          <button
+            v-if="!isGathering || !isBuilding || !isExploring"
+            @click="isCurrentlyBuilding"
+          >
+            Build
+          </button>
+          <!-- <HealPlayer /> -->
+        </div>
+        <div v-if="isBuilding">
+          <BuildShelter />
+          <ToolCreator />
+        </div>
+        <div v-if="isGathering">
+          <GatherResources />
+        </div>
+        <div v-if="isExploring">
+          <Exploration />
+        </div>
       </div>
     </div>
   </transition-group>
@@ -43,7 +45,7 @@ import BuildShelter from "./BuildShelter.vue";
 import GatherResources from "./GatherResources.vue";
 import Exploration from "./Exploration.vue";
 import HealPlayer from "./HealPlayer.vue";
-import introMessageVue from "./introMessage.vue";
+
 export default {
   components: {
     ToolCreator,
@@ -63,9 +65,10 @@ export default {
   },
   actions: {},
   mounted() {
+    //timer to render player controls after into text is finished.
     setInterval(() => {
       this.introIsFinished = true;
-    }, 13000);
+    }, 1000);
   },
 
   methods: {

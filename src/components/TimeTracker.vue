@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!gameOver">
     <p>Days Survived: {{ timeSurvived }}</p>
   </div>
 </template>
@@ -9,12 +9,15 @@ import { useGame } from "../stores/useGame";
 
 export default {
   setup() {
-    const { survival } = useGame();
-    return { survival };
+    const { survival, gameOver } = useGame();
+    return { survival, gameOver };
   },
   computed: {
     timeSurvived() {
       return this.survival.daysSurvived;
+    },
+    gameOver() {
+      return this.gameOver;
     },
   },
   created() {

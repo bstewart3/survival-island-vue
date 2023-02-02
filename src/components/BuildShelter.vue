@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="buildShelterButtons">
     <p v-if="shelterProgress >= 100">You have built a shelter</p>
     <div v-if="health > 0 && shelterProgress < 100">
       <button v-if="canBuild" @click="build()">Build Shelter</button>
@@ -34,6 +34,10 @@ export default {
     health() {
       return this.health.playerHealth;
     },
+
+    shelterBuilt() {
+      return this.shelter.shelterBuilt;
+    },
   },
   methods: {
     build() {
@@ -42,3 +46,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.buildShelterButtons {
+  margin-top: 2rem;
+}
+</style>

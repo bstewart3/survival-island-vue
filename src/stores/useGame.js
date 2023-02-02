@@ -4,9 +4,9 @@ export const useGame = defineStore({
   id: "game",
   state: () => ({
     resources: {
-      wood: 6,
-      stone: 2,
-      food: 4,
+      wood: 4,
+      stone: 4,
+      food: 100,
     },
     shelter: {
       shelterBuilt: false,
@@ -19,17 +19,19 @@ export const useGame = defineStore({
     survival: {
       daysSurvived: 0,
       winConditionsMet: 30,
+      gameOver: false,
+      gameWon: false,
     },
     tools: [
-      { name: "Axe", cost: { wood: 5, stone: 5 } },
-      { name: "Fishing Rod", cost: { wood: 6, stone: 1 } },
-      { name: "Spear", cost: { wood: 3, stone: 3 } },
+      { name: "Axe", cost: { wood: 8, stone: 6 } },
+      { name: "Fishing Rod", cost: { wood: 10, stone: 5 } },
+      { name: "Spear", cost: { wood: 5, stone: 8 } },
     ],
     danger: {
       dangers: [],
       dangerOccurred: false,
-      survivors: 0,
     },
+    survivors: 0,
     exploration: {
       newResourceFound: false,
       otherSurvivorFound: false,
@@ -44,50 +46,65 @@ export const useGame = defineStore({
     },
 
     userTools: [],
-    gameOver: false,
-    gameWon: false,
+
     discoveries: [],
   }),
 
   actions: {
-    //Action to gather resources
     gatherResources(resource, amount) {
       const hasAxe = this.userTools.filter((tool) => tool === "Axe");
       const hasFishingRod = this.userTools.filter(
         (tool) => tool === "Fishing Rod"
       );
-
-      if (hasAxe.length >= 1) {
+      const hasPickaxe = this.userTools.filter((tool) => tool === "Pickaxe");
+      // check if user has axe
+      if (hasAxe.length >= 1 && resource === "wood") {
         const doubleAmount = amount * 2;
         this.resources[resource] += doubleAmount;
+        this.story.storyLines.pop();
+        this.story.storyLines.push("You gather much more wood with your axe");
         this.tick();
+        return;
       }
-
-      if (hasFishingRod.length >= 1) {
-        const doubleAmount = amount + 1;
+      // check if user has fishing rod
+      if (hasFishingRod.length >= 1 && resource === "food") {
+        const doubleAmount = amount * 2;
         this.resources[resource] += doubleAmount;
+        this.story.storyLines.pop();
+        this.story.storyLines.push(
+          "You caught some large fish with your fishing rod"
+        );
         this.tick();
+        return;
       }
-
+      // check if user has pickaxe
+      if (hasPickaxe.length >= 1 && resource === "stone") {
+        const doubleAmount = amount * 2;
+        this.resources[resource] += doubleAmount;
+        this.story.storyLines.pop();
+        this.story.storyLines.push(
+          "You mine twice as much stone with your Pickaxe "
+        );
+        this.tick();
+        return;
+      }
       this.resources[resource] += amount;
       this.story.storyLines.pop();
       this.story.updatedIndex++;
       this.story.showMessage = true;
       this.story.storyLines.push("You gathered some" + " " + resource);
-
-      console.log(this.story.storyLines);
       this.tick();
     },
     useResources(resource, amount) {
       this.resources[resource] -= amount;
     },
-    discoverNewResource() {
+    discoverNewResource(resource, amount) {
+      this.resources[resource] += amount;
       this.exploration.newResourceFound = true;
       this.tick();
       this.story.showMessage = true;
       this.story.storyLines.pop();
-      this.story.storyLines.push("You found a new resource");
-      console.log("resource found ==>", this.exploration.newResourceFound);
+      this.story.storyLines.push("You found a new supply of " + resource);
     },
     discoverOtherSurvivor() {
       this.exploration.otherSurvivorFound = true;
@@ -96,7 +113,6 @@ export const useGame = defineStore({
       this.story.showMessage = true;
       this.story.storyLines.pop();
       this.story.storyLines.push("You found a survivor");
-      console.log("Survivor Found ==>", this.exploration.otherSurvivorFound);
     },
     discoverDanger() {
       this.exploration.dangerFound = true;
@@ -105,16 +121,10 @@ export const useGame = defineStore({
       this.story.showMessage = true;
       this.story.storyLines.pop();
       this.story.storyLines.push("You we're injured while exploring");
-      console.log("Danger Found ==>", this.exploration.dangerFound);
-    },
-    advanceStory() {
-      this.story.currentStoryIndex++;
-      console.log(this.story.currentStoryIndex);
     },
 
     addShelterProgress(amount) {
       this.shelter.shelterProgress += amount;
-      //   console.log(this.shelter.shelterProgress);
     },
 
     buildShelter() {
@@ -124,6 +134,15 @@ export const useGame = defineStore({
         this.addShelterProgress(25);
         this.tick();
       }
+      if (this.shelter.shelterProgress >= 100) {
+        this.shelter.shelterBuilt = true;
+        this.story.storyLines.pop();
+        this.story.showMessage = true;
+        this.story.storyLines.push(
+          "You have built a modest shelter... While building you discover a pickaxe in the sand."
+        );
+        this.userTools.push("Pickaxe");
+      }
     },
 
     canCreate(cost) {
@@ -131,6 +150,7 @@ export const useGame = defineStore({
         ([resource, value]) => this.resources[resource] >= value
       );
     },
+
     createTool(name) {
       const tool = this.tools.find((t) => t.name === name);
       if (!tool) return;
@@ -144,12 +164,20 @@ export const useGame = defineStore({
     damageHealth(amount) {
       this.health.playerHealth -= amount;
       if (this.health.playerHealth <= 0) {
-        this.gameOver = true;
+        this.survival.gameOver = true;
+        console.log("Game Over ==>", this.survival.gameOver);
       }
     },
     healHealth(amount) {
+      const newNum = this.health.playerHealth + amount;
+      const subtractFromTotal = newNum - 100;
+      console.log(newNum);
+      console.log(subtractFromTotal);
       if (this.health.playerHealth >= 100) {
         return;
+      }
+      if (this.health.playerHealth + amount > 100) {
+        this.health.playerHealth -= subtractFromTotal;
       }
       this.health.playerHealth += amount;
     },
@@ -159,22 +187,51 @@ export const useGame = defineStore({
     removeDanger(danger) {
       this.dangers = this.dangers.filter((d) => d !== danger);
     },
+
     checkForDanger() {
       const randomNum = Math.random();
+      const hasAxe = this.userTools.filter((tool) => tool === "Axe");
+      const hasSpear = this.userTools.filter((tool) => tool === "Spear");
+
       if (randomNum < 0.3) {
+        // generates storm
         this.danger.dangerOccurred = true;
         this.danger.dangers = "storm";
+        //check if player has built shelter, if not decrease player health
+        if (!this.shelter.shelterBuilt) {
+          this.story.showMessage = true;
+          this.story.storyLines.pop();
+          this.story.storyLines.push("You were injured by the Storm");
+          this.damageHealth(15);
+        } else {
+          this.story.storyLines.pop();
+          this.story.showMessage = true;
+          this.story.storyLines.push(
+            "A storm violently blows over your shelter"
+          );
+        }
       } else if (randomNum < 0.6) {
+        // generates wild animal
         this.danger.dangerOccurred = true;
         this.danger.dangers = "wild animal";
+        //check if user has a weapon, if not decrease player health
+        if (hasAxe.length > 0 || hasSpear.length > 0) {
+          this.story.storyLines.pop();
+          this.story.storyLines.push("You fought off the Wild Animal");
+        } else {
+          this.story.showMessage = true;
+          this.story.storyLines.pop();
+          this.story.storyLines.push("You were injured by a Wild Animal");
+          this.damageHealth(15);
+        }
       } else {
+        //no danger generated
         this.danger.dangerOccurred = false;
       }
       console.log(this.danger.dangers);
     },
     checkForStory() {
       const messages = this.story.storyLines;
-
       this.story.currentStoryIndex++;
 
       if (this.story.currentStoryIndex >= messages.length) {
@@ -188,16 +245,18 @@ export const useGame = defineStore({
     },
 
     tick() {
+      //move game forward one day, if no food decrease player health
       const randomNumber = Math.floor(Math.random() * 16);
+      if (this.survival.daysSurvived >= this.survival.winConditionsMet) {
+        this.survival.gameWon = true;
+      }
+
       this.survival.daysSurvived++;
       if (this.resources.food > 0) {
         this.resources.food--;
       } else {
         this.damageHealth(randomNumber);
-        console.log(this.health.playerHealth);
       }
-
-      console.log(this.survival.daysSurvived);
     },
   },
 });

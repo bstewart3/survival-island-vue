@@ -24,6 +24,7 @@ import { useGame } from "../stores/useGame";
 export default {
   setup() {
     const { userTools } = useGame();
+
     return { userTools };
   },
   computed: {

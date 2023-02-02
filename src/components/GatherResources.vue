@@ -1,5 +1,5 @@
 <template>
-  <div v-if="health > 0">
+  <div v-if="health > 0" class="gatherButtons">
     <button
       v-if="canGather"
       @click="gather('wood', 1)"
@@ -80,3 +80,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.gatherButtons {
+  margin-top: 2rem;
+}
+</style>

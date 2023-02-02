@@ -25,10 +25,10 @@ export default {
   },
   created() {
     const { checkForDanger } = useGame();
-    let randomNumber = Math.floor(Math.random() * (95000 - 35000 + 1)) + 35000;
+    let randomNumber = Math.floor(Math.random() * (95000 - 30000 + 1)) + 30000;
     setInterval(() => {
       checkForDanger();
-    }, 30000);
+    }, randomNumber);
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="toolCreatorButtons">
     <div>Tools:</div>
     <div v-for="(tool, index) in tools" :key="index">
       <button @click="createTool(tool.name)" :disabled="!canCreate(tool.cost)">
@@ -14,17 +14,18 @@ import { useGame } from "../stores/useGame";
 
 export default {
   setup() {
-    const { resources, createTool, canCreate } = useGame();
-    return { resources, createTool, canCreate };
+    const { resources, createTool, canCreate, tools } = useGame();
+    return { resources, createTool, canCreate, tools };
   },
-  data() {
-    return {
-      tools: [
-        { name: "Axe", cost: { wood: 8, stone: 6 } },
-        { name: "Fishing Rod", cost: { wood: 10, stone: 5 } },
-        { name: "Spear", cost: { wood: 5, stone: 8 } },
-      ],
-    };
+  computed: {
+    tools() {
+      return this.tools;
+    },
   },
 };
 </script>
+<style scoped>
+.toolCreatorButtons {
+  margin-top: 1rem;
+}
+</style>
