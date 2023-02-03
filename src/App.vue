@@ -3,23 +3,11 @@
     <div v-if="!gameOver && !gameWon">
       <TimeTracker />
       <DangerHandler />
-      <ResourceCounter />
-      <SurvivorHandler />
-      <div class="toolTracker">
-        <ToolTracker />
-      </div>
-      <div class="healthTracker">
-        <HealthTracker />
-      </div>
-      <div class="healPlayer">
-        <HealPlayer />
-      </div>
-      <div class="introMessage">
-        <IntroMessage />
-      </div>
-      <div class="storyLines">
-        <StoryLines />
-      </div>
+
+      <Inventory />
+
+      <Story />
+
       <div class="playerControls">
         <PlayerControls />
       </div>
@@ -39,31 +27,24 @@
 </template>
 
 <script>
-import ResourceCounter from "./components/ResourceCounter.vue";
-import HealthTracker from "./components/HealthTracker.vue";
-import HealPlayer from "./components/HealPlayer.vue";
 import TimeTracker from "./components/TimeTracker.vue";
 import DangerHandler from "./components/DangerHandler.vue";
-import StoryLines from "./components/StoryLine.vue";
-import IntroMessage from "./components/introMessage.vue";
+
 import PlayerControls from "./components/PlayerControls.vue";
-import ToolTracker from "./components/ToolTracker.vue";
-import SurvivorHandler from "./components/SurvivorHandler.vue";
+import Inventory from "./components/Inventory.vue";
+import Story from "./components/Story.vue";
 import { useGame } from "./stores/useGame";
 
 export default {
   name: "App",
   components: {
-    ResourceCounter,
-    HealthTracker,
-    HealPlayer,
     TimeTracker,
     DangerHandler,
-    StoryLines,
-    IntroMessage,
+
     PlayerControls,
-    ToolTracker,
-    SurvivorHandler,
+    Story,
+
+    Inventory,
   },
   setup() {
     const { survival } = useGame();
@@ -115,13 +96,20 @@ export default {
 }
 .playerControls {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+
   justify-content: center;
 }
 .introMessage {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.survivorHandler {
+  display: flex;
+
+  align-items: flex-start;
+  padding: 1.5rem;
 }
 </style>
 

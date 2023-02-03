@@ -206,7 +206,7 @@ export const useGame = defineStore({
         if (!this.shelter.shelterBuilt) {
           this.story.showMessage = true;
           this.story.storyLines.pop();
-          this.story.storyLines.push("You were injured by the Storm");
+          this.story.storyLines.push("You were injured by a Storm");
           this.damageHealth(15);
         } else {
           this.story.storyLines.pop();
@@ -222,7 +222,7 @@ export const useGame = defineStore({
         //check if user has a weapon, if not decrease player health
         if (hasAxe.length > 0 || hasSpear.length > 0) {
           this.story.storyLines.pop();
-          this.story.storyLines.push("You fought off the Wild Animal");
+          this.story.storyLines.push("You fought off a Wild Animal");
         } else {
           this.story.showMessage = true;
           this.story.storyLines.pop();

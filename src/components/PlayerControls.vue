@@ -1,6 +1,6 @@
 <template>
   <transition-group name="controls">
-    <div v-if="introIsFinished">
+    <div v-if="introIsFinished" class="playerControls">
       <div>
         <div>What would you like to do?</div>
         <div class="buttons">
@@ -68,7 +68,7 @@ export default {
     //timer to render player controls after into text is finished.
     setInterval(() => {
       this.introIsFinished = true;
-    }, 1000);
+    }, 12500);
   },
 
   methods: {
@@ -103,6 +103,9 @@ export default {
 .controls-leave-to {
   opacity: 0;
   transform: translateX(40px);
+}
+.playerControls {
+  margin-top: 20rem;
 }
 </style>
 >

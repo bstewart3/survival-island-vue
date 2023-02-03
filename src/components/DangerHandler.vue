@@ -1,10 +1,4 @@
-<template>
-  <div>
-    <transition-group name="danger" tag="div">
-      <p v-if="dangerOccurred">A {{ dangers }} has occurred!</p>
-    </transition-group>
-  </div>
-</template>
+<template></template>
 
 <script>
 import { useGame } from "../stores/useGame";
