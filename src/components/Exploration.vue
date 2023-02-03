@@ -38,12 +38,12 @@ export default {
       const resourcesArray = Object.keys(resources);
       const randomResource =
         resourcesArray[Math.floor(Math.random() * resourcesArray.length)];
-      const randomAmount = Math.floor(Math.random() * 14);
+      const randomResourceAmount = Math.floor(Math.random() * 14);
 
       if (discovery < 10) {
         discoverOtherSurvivor();
-      } else if (discovery < 50) {
-        discoverNewResource(randomResource, randomAmount);
+      } else if (discovery < 60) {
+        discoverNewResource(randomResource, randomResourceAmount);
       } else {
         discoverDanger();
       }

@@ -34,7 +34,7 @@ export default {
       if (this.currentIndex >= this.messages.length) {
         clearInterval();
       }
-    }, 4000);
+    }, 3000);
   },
 };
 </script>

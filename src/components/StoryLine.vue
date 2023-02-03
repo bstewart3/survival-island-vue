@@ -29,7 +29,7 @@ export default {
     }, 100);
     setInterval(() => {
       story.showMessage = false;
-    }, 6500);
+    }, 9500);
   },
 
   setup() {

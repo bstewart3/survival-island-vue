@@ -1,21 +1,19 @@
 <template>
   <div v-if="userTools.length > 0">
-    <transition-group name="tool" tag="div">
-      <div :key="userTools.length">
-        <table>
-          <thead>
-            <tr>
-              <th>Tool</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(tool, index) in userTools" :key="index">
-              <td>{{ tool }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </transition-group>
+    <div :key="userTools.length">
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(tool, index) in userTools" :key="index">
+            <td>{{ tool }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 

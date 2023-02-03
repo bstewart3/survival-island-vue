@@ -4,9 +4,9 @@ export const useGame = defineStore({
   id: "game",
   state: () => ({
     resources: {
-      wood: 4,
-      stone: 4,
-      food: 100,
+      wood: 60,
+      stone: 40,
+      food: 50,
     },
     shelter: {
       shelterBuilt: false,
@@ -36,6 +36,7 @@ export const useGame = defineStore({
       newResourceFound: false,
       otherSurvivorFound: false,
       dangerFound: false,
+      survivors: 0,
     },
     story: {
       storyLines: [],
@@ -108,7 +109,7 @@ export const useGame = defineStore({
     },
     discoverOtherSurvivor() {
       this.exploration.otherSurvivorFound = true;
-      this.survivors++;
+      this.exploration.survivors++;
       this.tick();
       this.story.showMessage = true;
       this.story.storyLines.pop();
@@ -159,6 +160,10 @@ export const useGame = defineStore({
         this.resources[resource] -= value;
       });
       this.userTools.push(tool.name);
+      this.story.storyLines.pop();
+      this.story.showMessage = true;
+      this.story.storyLines.push("You Crafted The " + " " + tool.name);
+
       console.log(this.userTools);
     },
     damageHealth(amount) {
@@ -238,6 +243,17 @@ export const useGame = defineStore({
         this.story.currentStoryIndex = 0;
       }
       this.story.currentMessage = messages[this.story.currentStoryIndex];
+    },
+
+    triggerSurvivorStory() {
+      this.story.showMessage = true;
+      this.story.storyLines.pop();
+      this.story.storyLines.push("The survivor says they can help you");
+    },
+    triggerSurvivorStory2() {
+      this.story.showMessage = true;
+      this.story.storyLines.pop();
+      this.story.storyLines.push("They are good at building..");
     },
 
     addDiscovery(discovery) {

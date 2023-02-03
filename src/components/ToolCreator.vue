@@ -14,12 +14,17 @@ import { useGame } from "../stores/useGame";
 
 export default {
   setup() {
-    const { resources, createTool, canCreate, tools } = useGame();
-    return { resources, createTool, canCreate, tools };
+    const { resources, createTool, canCreate, tools, userTools, hasTool } =
+      useGame();
+
+    return { resources, createTool, canCreate, tools, userTools, hasTool };
   },
   computed: {
     tools() {
       return this.tools;
+    },
+    userTools() {
+      return this.userTools;
     },
   },
 };
@@ -27,5 +32,6 @@ export default {
 <style scoped>
 .toolCreatorButtons {
   margin-top: 1rem;
+  margin-left: 1rem;
 }
 </style>

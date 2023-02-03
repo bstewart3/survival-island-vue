@@ -24,7 +24,7 @@
           </button>
           <!-- <HealPlayer /> -->
         </div>
-        <div v-if="isBuilding">
+        <div v-if="isBuilding" class="buildButtons">
           <BuildShelter />
           <ToolCreator />
         </div>

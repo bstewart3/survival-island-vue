@@ -2,7 +2,6 @@
   <div>
     <transition-group name="danger" tag="div">
       <p v-if="dangerOccurred">A {{ dangers }} has occurred!</p>
-      <p v-else>No danger at this time!</p>
     </transition-group>
   </div>
 </template>
@@ -15,6 +14,7 @@ export default {
     const { danger } = useGame();
     return { danger };
   },
+
   computed: {
     dangerOccurred() {
       return this.danger.dangerOccurred;
@@ -25,7 +25,7 @@ export default {
   },
   created() {
     const { checkForDanger } = useGame();
-    let randomNumber = Math.floor(Math.random() * (95000 - 30000 + 1)) + 30000;
+    let randomNumber = Math.floor(Math.random() * (60000 - 30000 + 1)) + 30000;
     setInterval(() => {
       checkForDanger();
     }, randomNumber);

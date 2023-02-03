@@ -4,6 +4,7 @@
       <TimeTracker />
       <DangerHandler />
       <ResourceCounter />
+      <SurvivorHandler />
       <div class="toolTracker">
         <ToolTracker />
       </div>
@@ -13,12 +14,15 @@
       <div class="healPlayer">
         <HealPlayer />
       </div>
-      <IntroMessage />
+      <div class="introMessage">
+        <IntroMessage />
+      </div>
       <div class="storyLines">
         <StoryLines />
       </div>
-
-      <PlayerControls />
+      <div class="playerControls">
+        <PlayerControls />
+      </div>
     </div>
     <transition-group name="game">
       <div v-if="gameOver">
@@ -44,6 +48,7 @@ import StoryLines from "./components/StoryLine.vue";
 import IntroMessage from "./components/introMessage.vue";
 import PlayerControls from "./components/PlayerControls.vue";
 import ToolTracker from "./components/ToolTracker.vue";
+import SurvivorHandler from "./components/SurvivorHandler.vue";
 import { useGame } from "./stores/useGame";
 
 export default {
@@ -58,6 +63,7 @@ export default {
     IntroMessage,
     PlayerControls,
     ToolTracker,
+    SurvivorHandler,
   },
   setup() {
     const { survival } = useGame();
@@ -87,14 +93,17 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  height: 100%;
 }
 .healthTracker {
   display: flex;
+
   align-items: flex-start;
   padding: 1.5rem;
 }
 .healPlayer {
   display: flex;
+
   align-items: flex-start;
   padding-left: 1.5rem;
 }
@@ -103,6 +112,16 @@ export default {
 }
 .toolTracker {
   padding: 1.5rem;
+}
+.playerControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.introMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
 
