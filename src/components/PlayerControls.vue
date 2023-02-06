@@ -24,16 +24,18 @@
           </button>
           <!-- <HealPlayer /> -->
         </div>
-        <div v-if="isBuilding" class="buildButtons">
-          <BuildShelter />
-          <ToolCreator />
-        </div>
-        <div v-if="isGathering">
-          <GatherResources />
-        </div>
-        <div v-if="isExploring">
-          <Exploration />
-        </div>
+        <transition-group name="buildButtonGroup">
+          <div v-if="isBuilding" class="buildButtons">
+            <BuildShelter />
+            <ToolCreator />
+          </div>
+          <div v-if="isGathering">
+            <GatherResources />
+          </div>
+          <div v-if="isExploring">
+            <Exploration />
+          </div>
+        </transition-group>
       </div>
     </div>
   </transition-group>
@@ -104,8 +106,9 @@ export default {
   opacity: 0;
   transform: translateX(40px);
 }
+
 .playerControls {
-  margin-top: 20rem;
+  margin-top: 2rem;
 }
 </style>
 >

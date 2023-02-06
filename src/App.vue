@@ -7,7 +7,7 @@
       <Inventory />
 
       <Story />
-
+      <BabylonScene />
       <div class="playerControls">
         <PlayerControls />
       </div>
@@ -29,6 +29,7 @@
 <script>
 import TimeTracker from "./components/TimeTracker.vue";
 import DangerHandler from "./components/DangerHandler.vue";
+import BabylonScene from "./components/BabylonScene.vue";
 
 import PlayerControls from "./components/PlayerControls.vue";
 import Inventory from "./components/Inventory.vue";
@@ -40,7 +41,7 @@ export default {
   components: {
     TimeTracker,
     DangerHandler,
-
+    BabylonScene,
     PlayerControls,
     Story,
 

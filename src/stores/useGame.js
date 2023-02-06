@@ -4,9 +4,9 @@ export const useGame = defineStore({
   id: "game",
   state: () => ({
     resources: {
-      wood: 60,
-      stone: 40,
-      food: 50,
+      wood: 6,
+      stone: 4,
+      food: 5,
     },
     shelter: {
       shelterBuilt: false,
@@ -18,7 +18,7 @@ export const useGame = defineStore({
     },
     survival: {
       daysSurvived: 0,
-      winConditionsMet: 30,
+      winConditionsMet: 90,
       gameOver: false,
       gameWon: false,
     },
@@ -63,6 +63,7 @@ export const useGame = defineStore({
         const doubleAmount = amount * 2;
         this.resources[resource] += doubleAmount;
         this.story.storyLines.pop();
+        this.story.showMessage = true;
         this.story.storyLines.push("You gather much more wood with your axe");
         this.tick();
         return;
@@ -72,6 +73,7 @@ export const useGame = defineStore({
         const doubleAmount = amount * 2;
         this.resources[resource] += doubleAmount;
         this.story.storyLines.pop();
+        this.story.showMessage = true;
         this.story.storyLines.push(
           "You caught some large fish with your fishing rod"
         );
@@ -83,6 +85,7 @@ export const useGame = defineStore({
         const doubleAmount = amount * 2;
         this.resources[resource] += doubleAmount;
         this.story.storyLines.pop();
+        this.story.showMessage = true;
         this.story.storyLines.push(
           "You mine twice as much stone with your Pickaxe "
         );

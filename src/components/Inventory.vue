@@ -1,20 +1,22 @@
 <template>
-  <div class="inventory">
-    <ResourceCounter />
+  <transition-group name="inventoryGroup">
+    <div class="inventory" v-if="isIntroComplete">
+      <ResourceCounter />
 
-    <div class="survivorHandler">
-      <SurvivorHandler />
+      <div class="survivorHandler">
+        <SurvivorHandler />
+      </div>
+      <div class="toolTracker">
+        <ToolTracker />
+      </div>
+      <div class="healthTracker">
+        <HealthTracker />
+      </div>
+      <div class="healPlayer">
+        <HealPlayer />
+      </div>
     </div>
-    <div class="toolTracker">
-      <ToolTracker />
-    </div>
-    <div class="healthTracker">
-      <HealthTracker />
-    </div>
-    <div class="healPlayer">
-      <HealPlayer />
-    </div>
-  </div>
+  </transition-group>
 </template>
 
 <script>
@@ -31,19 +33,39 @@ export default {
     ToolTracker,
     SurvivorHandler,
   },
+  data() {
+    return {
+      isIntroComplete: false,
+    };
+  },
+  mounted() {
+    let intervalId = setInterval(() => {
+      this.isIntroComplete = true;
+      clearInterval(intervalId);
+    }, 14000);
+  },
 };
 </script>
 
 <style>
 .inventory {
   position: fixed;
-  top: 0;
-  left: 0;
+  margin-top: 3rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
   height: 100%;
   width: 10rem;
+}
+
+.inventoryGroup-enter-active,
+.inventoryGroup-leave-active {
+  transition: all 1s ease-out;
+}
+.inventoryGroup-enter-from,
+.inventoryGroup-leave-to {
+  opacity: 0;
+  transform: translateX(40px);
 }
 </style>

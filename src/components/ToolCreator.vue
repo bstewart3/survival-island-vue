@@ -2,7 +2,10 @@
   <div class="toolCreatorButtons">
     <div>Tools:</div>
     <div v-for="(tool, index) in tools" :key="index">
-      <button @click="createTool(tool.name)" :disabled="!canCreate(tool.cost)">
+      <button
+        @click="createTool(tool.name)"
+        :disabled="!canCreate(tool.cost) || this.userTools.includes(tool.name)"
+      >
         {{ tool.name }}
       </button>
     </div>
