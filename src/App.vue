@@ -1,69 +1,41 @@
 <template>
   <div>
-    <div v-if="!gameOver && !gameWon">
-      <TimeTracker />
-      <DangerHandler />
-
-      <Inventory />
-
-      <Story />
-      <BabylonScene />
-      <div class="playerControls">
-        <PlayerControls />
-      </div>
-    </div>
-    <transition-group name="game">
-      <div v-if="gameOver">
-        <h2>You Have Died!</h2>
-        <br />
-        <button @click="reloadPage">Restart</button>
-      </div>
-      <div v-if="gameWon">
-        <h2>You Have Won!</h2>
-        <button @click="reloadPage">Restart</button>
-      </div>
-    </transition-group>
+    <nav>
+      <router-link to="/">Home</router-link>
+      <router-link to="/login">Login</router-link>
+      <router-link to="/register">Register</router-link>
+      <router-link to="/game">Game</router-link>
+      <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
+    </nav>
+    <router-view></router-view>
   </div>
 </template>
 
-<script>
-import TimeTracker from "./components/TimeTracker.vue";
-import DangerHandler from "./components/DangerHandler.vue";
-import BabylonScene from "./components/BabylonScene.vue";
+<script setup>
+import { onMounted, ref } from "vue";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { useRouter } from "vue-router";
 
-import PlayerControls from "./components/PlayerControls.vue";
-import Inventory from "./components/Inventory.vue";
-import Story from "./components/Story.vue";
-import { useGame } from "./stores/useGame";
+const router = useRouter();
+const isLoggedIn = ref(false);
 
-export default {
-  name: "App",
-  components: {
-    TimeTracker,
-    DangerHandler,
-    BabylonScene,
-    PlayerControls,
-    Story,
+let auth;
 
-    Inventory,
-  },
-  setup() {
-    const { survival } = useGame();
-    return { survival };
-  },
-  computed: {
-    gameOver() {
-      return this.survival.gameOver;
-    },
-    gameWon() {
-      return this.survival.gameWon;
-    },
-  },
-  methods: {
-    reloadPage() {
-      window.location.reload();
-    },
-  },
+onMounted(() => {
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      isLoggedIn.value = true;
+    } else {
+      isLoggedIn.value = false;
+    }
+  });
+});
+
+const handleSignOut = () => {
+  signOut(auth).then(() => {
+    router.push("/");
+  });
 };
 </script>
 
