@@ -32,6 +32,7 @@ const register = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then((data) => {
       console.log("Successfully registered");
+      setUser(data.user.uid);
       router.push("/game");
     })
     .catch((error) => {

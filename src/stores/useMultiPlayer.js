@@ -1,16 +1,22 @@
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import { defineStore } from "pinia";
+import { db } from "../main";
+import { useLogin } from "../stores/login";
 
 export const useMultiPlayer = defineStore({
   id: "multiplayer",
   state: () => ({
-    playerScore: 0,
     multiplayer: {
       lookingForPlayers: false,
       openGamesArray: [],
       showOpenGames: false,
       joinedGame: false,
       playerJoined: false,
+      gameEnded: false,
       currentGame: "",
+      currentUser: "",
+      playerScore: 0,
+      opponentScore: 0,
     },
     resources: {
       wood: 6,
@@ -66,11 +72,54 @@ export const useMultiPlayer = defineStore({
     },
     playerLeftGame() {
       this.multiplayer.playerJoined = false;
+      console.log(this.multiplayer.playerJoined);
     },
     setCurrentGame(gameId) {
       this.currentGame = gameId;
       console.log(this.currentGame);
     },
+    async getPlayerScore() {
+      const { user } = useLogin();
+      if (this.currentGame === undefined) {
+        return;
+      }
+      const gameRef = doc(db, "games", this.currentGame);
+      const docSnap = await getDoc(gameRef);
+      if (docSnap.data().player1 === user) {
+        this.currentUser = "player1";
+      } else if (docSnap.data().player2 === user) {
+        this.currentUser = "player2";
+      }
+      if (this.currentUser === "player1") {
+        this.multiplayer.playerScore = docSnap.data().player1Score;
+        this.multiplayer.opponentScore = docSnap.data().player2Score;
+      } else if (this.currentUser === "player2") {
+        this.multiplayer.playerScore = docSnap.data().player2Score;
+        this.multiplayer.opponentScore = docSnap.data().player1Score;
+      }
+    },
+    async addPlayerScore(amount) {
+      const { user } = useLogin();
+      const gameRef = doc(db, "games", this.currentGame);
+      const docSnap = await getDoc(gameRef);
+      if (docSnap.data().player1 === user) {
+        this.currentUser = "player1";
+      } else if (docSnap.data().player2 === user) {
+        this.currentUser = "player2";
+      }
+      console.log(this.currentUser);
+
+      if (this.currentUser === "player1") {
+        await updateDoc(gameRef, {
+          player1Score: increment(amount),
+        });
+      } else if (this.currentUser === "player2") {
+        await updateDoc(gameRef, {
+          player2Score: increment(amount),
+        });
+      }
+    },
+
     gatherResources(resource, amount) {
       const hasAxe = this.userTools.filter((tool) => tool === "Axe");
       const hasFishingRod = this.userTools.filter(

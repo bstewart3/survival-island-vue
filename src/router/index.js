@@ -13,6 +13,13 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
+    {
+      path: "/multiplayer",
+      component: () => import("../pages/Multiplayer.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
   ],
 });
 
