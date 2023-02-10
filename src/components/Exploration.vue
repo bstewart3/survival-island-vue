@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="exploreButtons">
     <button @click="explore">Explore The Island</button>
   </div>
 </template>
@@ -9,8 +9,8 @@ import { useGame } from "../stores/useGame";
 
 export default {
   setup() {
-    const { exploration } = useGame();
-    return { exploration };
+    const { exploration, resources } = useGame();
+    return { exploration, resources };
   },
   computed: {
     newResourceFound() {
@@ -22,16 +22,28 @@ export default {
     dangerFound() {
       return this.exploration.dangerFound;
     },
+    resources() {
+      return this.resources;
+    },
   },
   methods: {
     explore() {
-      const { discoverNewResource, discoverOtherSurvivor, discoverDanger } =
-        useGame();
-      const discovery = Math.random();
-      if (discovery < 0.5) {
-        discoverNewResource();
-      } else if (discovery < 0.8) {
+      const {
+        discoverNewResource,
+        discoverOtherSurvivor,
+        discoverDanger,
+        resources,
+      } = useGame();
+      const discovery = Math.floor(Math.random() * 100);
+      const resourcesArray = Object.keys(resources);
+      const randomResource =
+        resourcesArray[Math.floor(Math.random() * resourcesArray.length)];
+      const randomResourceAmount = Math.floor(Math.random() * 14);
+
+      if (discovery < 10) {
         discoverOtherSurvivor();
+      } else if (discovery < 60) {
+        discoverNewResource(randomResource, randomResourceAmount);
       } else {
         discoverDanger();
       }
@@ -39,3 +51,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.exploreButtons {
+  margin-top: 2rem;
+}
+</style>

@@ -1,37 +1,42 @@
 <template>
   <transition-group name="controls">
-    <div v-if="introIsFinished">
-      <div>What would you like to do?</div>
-      <div class="buttons">
-        <button
-          v-if="!isGathering || !isBuilding || !isExploring"
-          @click="isCurrentlyGathering"
-        >
-          Gather
-        </button>
-        <button
-          v-if="!isGathering || !isBuilding || !isExploring"
-          @click="isCurrentlyExploring"
-        >
-          Explore
-        </button>
-        <button
-          v-if="!isGathering || !isBuilding || !isExploring"
-          @click="isCurrentlyBuilding"
-        >
-          Build
-        </button>
-        <!-- <HealPlayer /> -->
-      </div>
-      <div v-if="isBuilding">
-        <BuildShelter />
-        <ToolCreator />
-      </div>
-      <div v-if="isGathering">
-        <GatherResources />
-      </div>
-      <div v-if="isExploring">
-        <Exploration />
+    <div v-if="introIsFinished" class="playerControls">
+      <!-- <button @click="$emit('someEvent')">Click it</button> -->
+      <div>
+        <div>What would you like to do?</div>
+        <div class="buttons">
+          <button
+            v-if="!isGathering || !isBuilding || !isExploring"
+            @click="isCurrentlyGathering"
+          >
+            Gather
+          </button>
+          <button
+            v-if="!isGathering || !isBuilding || !isExploring"
+            @click="isCurrentlyExploring"
+          >
+            Explore
+          </button>
+          <button
+            v-if="!isGathering || !isBuilding || !isExploring"
+            @click="isCurrentlyBuilding"
+          >
+            Build
+          </button>
+          <!-- <HealPlayer /> -->
+        </div>
+        <transition-group name="buildButtonGroup">
+          <div v-if="isBuilding" class="buildButtons">
+            <BuildShelter />
+            <ToolCreator />
+          </div>
+          <div v-if="isGathering">
+            <GatherResources @gather-resource="moveCube" />
+          </div>
+          <div v-if="isExploring">
+            <Exploration />
+          </div>
+        </transition-group>
       </div>
     </div>
   </transition-group>
@@ -43,8 +48,9 @@ import BuildShelter from "./BuildShelter.vue";
 import GatherResources from "./GatherResources.vue";
 import Exploration from "./Exploration.vue";
 import HealPlayer from "./HealPlayer.vue";
-import introMessageVue from "./introMessage.vue";
+
 export default {
+  emits: ["someEvent"],
   components: {
     ToolCreator,
     BuildShelter,
@@ -63,12 +69,17 @@ export default {
   },
   actions: {},
   mounted() {
+    //timer to render player controls after into text is finished.
     setInterval(() => {
       this.introIsFinished = true;
-    }, 13000);
+    }, 500);
   },
 
   methods: {
+    moveCube() {
+      this.$emit("someEvent");
+    },
+
     isCurrentlyGathering() {
       this.isGathering = true;
       this.isBuilding = false;
@@ -100,6 +111,10 @@ export default {
 .controls-leave-to {
   opacity: 0;
   transform: translateX(40px);
+}
+
+.playerControls {
+  margin-top: 2rem;
 }
 </style>
 >

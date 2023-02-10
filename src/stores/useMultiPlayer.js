@@ -1,10 +1,25 @@
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import { defineStore } from "pinia";
-import myScene from "../scenes/MyFirstScene";
-import { useMultiPlayer } from "../stores/useMultiPlayer";
-export const useGame = defineStore({
-  id: "game",
+import { db } from "../main";
+import { useLogin } from "../stores/login";
+
+export const useMultiPlayer = defineStore({
+  id: "multiplayer",
   state: () => ({
-    gameMode: "",
+    multiplayer: {
+      multiPlayerGame: false,
+      lookingForPlayers: false,
+      openGamesArray: [],
+      showOpenGames: false,
+      joinedGame: false,
+      playerJoined: false,
+      gameEnded: false,
+      currentGame: "",
+      currentUser: "",
+      playerScore: 0,
+      opponentScore: 0,
+      gameOverMessage: "",
+    },
     resources: {
       wood: 6,
       stone: 4,
@@ -54,14 +69,92 @@ export const useGame = defineStore({
   }),
 
   actions: {
-    handleMultiPlayerMode() {
-      this.gameMode = "multiPlayer";
+    handleMultiPlayer() {
+      this.multiplayer.multiplayerGame = !this.multiplayer.multiplayerGame;
     },
-    handleSinglePlayerMode() {
-      this.gameMode = "singlePlayer";
+    playerJoinedGame() {
+      this.multiplayer.playerJoined = true;
     },
+    playerLeftGame() {
+      this.multiplayer.playerJoined = false;
+      this.multiplayer.gameEnded = false;
+      console.log(this.multiplayer.playerJoined);
+    },
+    setCurrentGame(gameId) {
+      this.currentGame = gameId;
+      console.log(this.currentGame);
+    },
+    closeMultiplayer() {
+      this.multiplayer.gameEnded = false;
+    },
+    async getPlayerScore() {
+      const { user } = useLogin();
+      if (this.currentGame === undefined) {
+        return;
+      }
+
+      const gameRef = doc(db, "games", this.currentGame);
+      const docSnap = await getDoc(gameRef);
+
+      if (docSnap.data().player1 === user) {
+        this.currentUser = "player1";
+      } else if (docSnap.data().player2 === user) {
+        this.currentUser = "player2";
+      }
+
+      if (docSnap.data().player1Score >= 500) {
+        this.multiplayer.gameEnded = true;
+        this.currentGame = undefined;
+        if (this.currentUser === "player1") {
+          this.multiplayer.gameOverMessage = "You Won The Game";
+        } else {
+          this.multiplayer.gameOverMessage = "You Lost The Game";
+        }
+        return;
+      } else if (docSnap.data().player2Score >= 500) {
+        this.multiplayer.gameEnded = true;
+        this.currentGame = undefined;
+        if (this.currentUser === "player2") {
+          this.multiplayer.gameOverMessage = "You Won The Game";
+        } else {
+          this.multiplayer.gameOverMessage = "You Lost The Game";
+        }
+        return;
+      }
+
+      if (this.currentUser === "player1") {
+        this.multiplayer.playerScore = docSnap.data().player1Score;
+        this.multiplayer.opponentScore = docSnap.data().player2Score;
+        return;
+      } else if (this.currentUser === "player2") {
+        this.multiplayer.playerScore = docSnap.data().player2Score;
+        this.multiplayer.opponentScore = docSnap.data().player1Score;
+        return;
+      }
+    },
+    async addPlayerScore(amount) {
+      const { user } = useLogin();
+      const gameRef = doc(db, "games", this.currentGame);
+      const docSnap = await getDoc(gameRef);
+      if (docSnap.data().player1 === user) {
+        this.currentUser = "player1";
+      } else if (docSnap.data().player2 === user) {
+        this.currentUser = "player2";
+      }
+      console.log(this.currentUser);
+
+      if (this.currentUser === "player1") {
+        await updateDoc(gameRef, {
+          player1Score: increment(amount),
+        });
+      } else if (this.currentUser === "player2") {
+        await updateDoc(gameRef, {
+          player2Score: increment(amount),
+        });
+      }
+    },
+
     gatherResources(resource, amount) {
-      const state = useMultiPlayer();
       const hasAxe = this.userTools.filter((tool) => tool === "Axe");
       const hasFishingRod = this.userTools.filter(
         (tool) => tool === "Fishing Rod"
@@ -70,9 +163,6 @@ export const useGame = defineStore({
       // check if user has axe
       if (hasAxe.length >= 1 && resource === "wood") {
         const doubleAmount = amount * 2;
-        if (this.gameMode === "multiPlayer") {
-          state.addPlayerScore(50);
-        }
         this.resources[resource] += doubleAmount;
         this.story.storyLines.pop();
         this.story.showMessage = true;
@@ -83,9 +173,6 @@ export const useGame = defineStore({
       // check if user has fishing rod
       if (hasFishingRod.length >= 1 && resource === "food") {
         const doubleAmount = amount * 2;
-        if (this.gameMode === "multiPlayer") {
-          state.addPlayerScore(50);
-        }
         this.resources[resource] += doubleAmount;
         this.story.storyLines.pop();
         this.story.showMessage = true;
@@ -98,11 +185,6 @@ export const useGame = defineStore({
       // check if user has pickaxe
       if (hasPickaxe.length >= 1 && resource === "stone") {
         const doubleAmount = amount * 2;
-        myScene.setStone("sphereTemplate");
-
-        if (this.gameMode === "multiPlayer") {
-          state.addPlayerScore(50);
-        }
         this.resources[resource] += doubleAmount;
         this.story.storyLines.pop();
         this.story.showMessage = true;
@@ -112,15 +194,7 @@ export const useGame = defineStore({
         this.tick();
         return;
       }
-      if (resource === "wood") {
-        myScene.setStick("stickTemplate");
-      } else if (resource === "stone") {
-        myScene.setStone("sphereTemplate");
-      }
       this.resources[resource] += amount;
-      if (this.gameMode === "multiPlayer") {
-        state.addPlayerScore(25);
-      }
       this.story.storyLines.pop();
       this.story.updatedIndex++;
       this.story.showMessage = true;
@@ -131,11 +205,7 @@ export const useGame = defineStore({
       this.resources[resource] -= amount;
     },
     discoverNewResource(resource, amount) {
-      const state = useMultiPlayer();
       this.resources[resource] += amount;
-      if (this.gameMode === "multiPlayer") {
-        state.addPlayerScore(25);
-      }
       this.exploration.newResourceFound = true;
       this.tick();
       this.story.showMessage = true;
@@ -143,12 +213,8 @@ export const useGame = defineStore({
       this.story.storyLines.push("You found a new supply of " + resource);
     },
     discoverOtherSurvivor() {
-      const state = useMultiPlayer();
       this.exploration.otherSurvivorFound = true;
       this.exploration.survivors++;
-      if (this.gameMode === "multiPlayer") {
-        state.addPlayerScore(75);
-      }
       this.tick();
       this.story.showMessage = true;
       this.story.storyLines.pop();
@@ -164,27 +230,18 @@ export const useGame = defineStore({
     },
 
     addShelterProgress(amount) {
-      const state = useMultiPlayer();
       this.shelter.shelterProgress += amount;
-      if (this.gameMode === "multiPlayer") {
-        state.addPlayerScore(25);
-      }
     },
 
     buildShelter() {
-      const state = useMultiPlayer();
       if (this.resources.wood >= 10 && this.resources.stone >= 5) {
         this.useResources("wood", 10);
         this.useResources("stone", 5);
         this.addShelterProgress(25);
-
         this.tick();
       }
       if (this.shelter.shelterProgress >= 100) {
         this.shelter.shelterBuilt = true;
-        if (this.gameMode === "multiPlayer") {
-          state.addPlayerScore(100);
-        }
         this.story.storyLines.pop();
         this.story.showMessage = true;
         this.story.storyLines.push(
@@ -201,7 +258,6 @@ export const useGame = defineStore({
     },
 
     createTool(name) {
-      const state = useMultiPlayer();
       const tool = this.tools.find((t) => t.name === name);
       if (!tool) return;
       const cost = tool.cost;
@@ -212,19 +268,14 @@ export const useGame = defineStore({
       this.story.storyLines.pop();
       this.story.showMessage = true;
       this.story.storyLines.push("You Crafted The " + " " + tool.name);
-      if (this.gameMode === "multiPlayer") {
-        state.addPlayerScore(25);
-      }
 
       console.log(this.userTools);
     },
     damageHealth(amount) {
       this.health.playerHealth -= amount;
-      if (this.gameMode === "singlePlayer") {
-        if (this.health.playerHealth <= 0) {
-          this.survival.gameOver = true;
-          console.log("Game Over ==>", this.survival.gameOver);
-        }
+      if (this.health.playerHealth <= 0) {
+        this.survival.gameOver = true;
+        console.log("Game Over ==>", this.survival.gameOver);
       }
     },
     healHealth(amount) {
@@ -248,7 +299,6 @@ export const useGame = defineStore({
     },
 
     checkForDanger() {
-      const state = useMultiPlayer();
       const randomNum = Math.random();
       const hasAxe = this.userTools.filter((tool) => tool === "Axe");
       const hasSpear = this.userTools.filter((tool) => tool === "Spear");
@@ -266,7 +316,6 @@ export const useGame = defineStore({
         } else {
           this.story.storyLines.pop();
           this.story.showMessage = true;
-          state.addPlayerScore(50);
           this.story.storyLines.push(
             "A storm violently blows over your shelter"
           );
@@ -277,7 +326,6 @@ export const useGame = defineStore({
         this.danger.dangers = "wild animal";
         //check if user has a weapon, if not decrease player health
         if (hasAxe.length > 0 || hasSpear.length > 0) {
-          state.addPlayerScore(50);
           this.story.storyLines.pop();
           this.story.storyLines.push("You fought off a Wild Animal");
         } else {
