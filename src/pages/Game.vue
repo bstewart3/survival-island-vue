@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="game">
     <div v-if="!gameOver && !gameWon">
       <TimeTracker />
       <DangerHandler />
@@ -7,7 +7,10 @@
       <Inventory />
 
       <Story />
-      <BabylonScene />
+      <div class="babylonScene">
+        <BabylonScene />
+      </div>
+
       <div class="playerControls">
         <PlayerControls />
       </div>
@@ -47,9 +50,22 @@ export default {
 
     Inventory,
   },
+  data() {
+    return {
+      cubePosition: {},
+
+      offset: 0,
+      x: 0,
+      y: 0,
+      z: 0,
+    };
+  },
   setup() {
-    const { survival } = useGame();
-    return { survival };
+    const { survival, handleSinglePlayerMode } = useGame();
+    return { survival, handleSinglePlayerMode };
+  },
+  mounted() {
+    this.handleSinglePlayerMode();
   },
   computed: {
     gameOver() {
@@ -63,6 +79,20 @@ export default {
     reloadPage() {
       window.location.reload();
     },
+
+    moveCube() {
+      this.getNextPosition();
+      this.moveCubeTheRightWay();
+    },
+    moveCubeTheRightWay() {
+      this.cubePosition = { x: 2, y: this.y, z: this.z };
+    },
+    getNextPosition() {
+      this.offset += 0.5;
+      this.x = 0;
+      this.y = -5 + this.offset;
+      this.z = 0;
+    },
   },
 };
 </script>
@@ -75,8 +105,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  height: 100%;
 }
+
 .healthTracker {
   display: flex;
 
@@ -98,7 +128,6 @@ export default {
 .playerControls {
   display: flex;
   flex-direction: row;
-
   justify-content: center;
 }
 .introMessage {

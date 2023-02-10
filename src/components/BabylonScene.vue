@@ -1,25 +1,35 @@
 <template>
-  <canvas ref="bjsCanvas" width="700" height="400" />
+  <div>
+    <canvas ref="bjsCanvas" width="700" height="350" />
+  </div>
 </template>
 
 <script>
-import { ref, onMounted } from "@vue/runtime-core";
-import { createScene } from "../scenes/Island1";
+import myScene from "../scenes/MyFirstScene";
 
 export default {
   name: "BabylonScene",
-  setup() {
-    const bjsCanvas = ref(null);
+  props: {
+    position: {
+      type: Object,
+      default() {
+        return { x: 0, y: 0, z: 0 };
+      },
+    },
+  },
 
-    onMounted(() => {
-      if (bjsCanvas.value) {
-        createScene(bjsCanvas.value);
+  watch: {
+    position(val) {
+      if (val) {
+        myScene.setStick("stickTemplate", val.x, val.y, val.z);
       }
-    });
-
-    return {
-      bjsCanvas,
-    };
+    },
+  },
+  mounted() {
+    const bjsCanvas = this.$refs.bjsCanvas;
+    if (bjsCanvas) {
+      myScene.createScene(bjsCanvas);
+    }
   },
 };
 </script>

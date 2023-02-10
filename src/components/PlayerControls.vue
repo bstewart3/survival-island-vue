@@ -1,6 +1,7 @@
 <template>
   <transition-group name="controls">
     <div v-if="introIsFinished" class="playerControls">
+      <!-- <button @click="$emit('someEvent')">Click it</button> -->
       <div>
         <div>What would you like to do?</div>
         <div class="buttons">
@@ -30,7 +31,7 @@
             <ToolCreator />
           </div>
           <div v-if="isGathering">
-            <GatherResources />
+            <GatherResources @gather-resource="moveCube" />
           </div>
           <div v-if="isExploring">
             <Exploration />
@@ -49,6 +50,7 @@ import Exploration from "./Exploration.vue";
 import HealPlayer from "./HealPlayer.vue";
 
 export default {
+  emits: ["someEvent"],
   components: {
     ToolCreator,
     BuildShelter,
@@ -70,10 +72,14 @@ export default {
     //timer to render player controls after into text is finished.
     setInterval(() => {
       this.introIsFinished = true;
-    }, 12500);
+    }, 500);
   },
 
   methods: {
+    moveCube() {
+      this.$emit("someEvent");
+    },
+
     isCurrentlyGathering() {
       this.isGathering = true;
       this.isBuilding = false;

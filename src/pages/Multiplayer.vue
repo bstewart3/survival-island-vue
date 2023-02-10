@@ -4,11 +4,15 @@
       <div>Player Score:{{ this.playerScore }}</div>
       <div>Opponent Score: {{ this.opponentScore }}</div>
       <div>Current Game:{{ this.currentGame }}</div>
-      <button @click="addScore()">add Player Score</button>
     </div>
 
     <div v-if="playerLeft">Player Left Game</div>
     <button v-if="playerLeft" @click="reloadPage">Close</button>
+    <div v-if="gameEnded">
+      <h3>Game Over</h3>
+      <p>{{ gameOverMessage }}</p>
+      <button @click="reloadPage">Close</button>
+    </div>
     <div v-if="playerJoined && !gameEnded && !playerLeft">
       <h3>Player has joined</h3>
       <button @click="leaveGame()">Leave Current Game</button>
@@ -77,6 +81,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { useLogin } from "../stores/login";
+import { useGame } from "../stores/useGame";
 import { useMultiPlayer } from "../stores/useMultiPlayer";
 import MultiPlayerGame from "./MultiPlayerGame.vue";
 
@@ -88,7 +93,6 @@ export default {
       showOpenGames: false,
       joinedGame: false,
       currentGame: "",
-      gameEnded: false,
       player1Score: null,
       player2Score: 0,
       playerLeft: false,
@@ -102,7 +106,10 @@ export default {
       setCurrentGame,
       addPlayerScore,
       getPlayerScore,
+      closeMultiplayer,
+      handleMultiPlayer,
     } = useMultiPlayer();
+    const { handleMultiPlayerMode } = useGame();
 
     return {
       multiplayer,
@@ -111,6 +118,9 @@ export default {
       setCurrentGame,
       addPlayerScore,
       getPlayerScore,
+      closeMultiplayer,
+      handleMultiPlayer,
+      handleMultiPlayerMode,
     };
   },
   components: {
@@ -126,17 +136,30 @@ export default {
     playerJoined() {
       return this.multiplayer.playerJoined;
     },
+    gameEnded() {
+      return this.multiplayer.gameEnded;
+    },
+    winner() {
+      return this.multiplayer.winner;
+    },
+    gameOverMessage() {
+      return this.multiplayer.gameOverMessage;
+    },
+    multiPlayerGame() {
+      return this.multiplayer.multiPlayerGame;
+    },
   },
   mounted() {
     this.loadGames();
+    this.handleMultiPlayerMode();
 
-    setInterval(() => {
+    let intervalId = setInterval(() => {
       this.getPlayerScore();
     }, 1000);
   },
+
   updated() {
     this.loadGames();
-    console.log(this.playerJoined);
   },
   methods: {
     async addScore() {
@@ -150,6 +173,7 @@ export default {
       this.showOpenGames = false;
       this.currentGame = "";
     },
+
     async testFirebase() {
       try {
         const { user } = useLogin();

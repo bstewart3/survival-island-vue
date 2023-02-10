@@ -7,6 +7,7 @@ export const useMultiPlayer = defineStore({
   id: "multiplayer",
   state: () => ({
     multiplayer: {
+      multiPlayerGame: false,
       lookingForPlayers: false,
       openGamesArray: [],
       showOpenGames: false,
@@ -17,6 +18,7 @@ export const useMultiPlayer = defineStore({
       currentUser: "",
       playerScore: 0,
       opponentScore: 0,
+      gameOverMessage: "",
     },
     resources: {
       wood: 6,
@@ -67,35 +69,67 @@ export const useMultiPlayer = defineStore({
   }),
 
   actions: {
+    handleMultiPlayer() {
+      this.multiplayer.multiplayerGame = !this.multiplayer.multiplayerGame;
+    },
     playerJoinedGame() {
       this.multiplayer.playerJoined = true;
     },
     playerLeftGame() {
       this.multiplayer.playerJoined = false;
+      this.multiplayer.gameEnded = false;
       console.log(this.multiplayer.playerJoined);
     },
     setCurrentGame(gameId) {
       this.currentGame = gameId;
       console.log(this.currentGame);
     },
+    closeMultiplayer() {
+      this.multiplayer.gameEnded = false;
+    },
     async getPlayerScore() {
       const { user } = useLogin();
       if (this.currentGame === undefined) {
         return;
       }
+
       const gameRef = doc(db, "games", this.currentGame);
       const docSnap = await getDoc(gameRef);
+
       if (docSnap.data().player1 === user) {
         this.currentUser = "player1";
       } else if (docSnap.data().player2 === user) {
         this.currentUser = "player2";
       }
+
+      if (docSnap.data().player1Score >= 500) {
+        this.multiplayer.gameEnded = true;
+        this.currentGame = undefined;
+        if (this.currentUser === "player1") {
+          this.multiplayer.gameOverMessage = "You Won The Game";
+        } else {
+          this.multiplayer.gameOverMessage = "You Lost The Game";
+        }
+        return;
+      } else if (docSnap.data().player2Score >= 500) {
+        this.multiplayer.gameEnded = true;
+        this.currentGame = undefined;
+        if (this.currentUser === "player2") {
+          this.multiplayer.gameOverMessage = "You Won The Game";
+        } else {
+          this.multiplayer.gameOverMessage = "You Lost The Game";
+        }
+        return;
+      }
+
       if (this.currentUser === "player1") {
         this.multiplayer.playerScore = docSnap.data().player1Score;
         this.multiplayer.opponentScore = docSnap.data().player2Score;
+        return;
       } else if (this.currentUser === "player2") {
         this.multiplayer.playerScore = docSnap.data().player2Score;
         this.multiplayer.opponentScore = docSnap.data().player1Score;
+        return;
       }
     },
     async addPlayerScore(amount) {

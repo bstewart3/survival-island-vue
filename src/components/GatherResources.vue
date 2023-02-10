@@ -1,6 +1,7 @@
 <template>
   <div v-if="health > 0" class="gatherButtons">
     <button
+      id="gather-wood"
       v-if="canGather"
       @click="gather('wood', 1)"
       :disabled="isWoodDisabled"
@@ -29,6 +30,7 @@
 import { useGame } from "../stores/useGame";
 
 export default {
+  emits: ["gatherResource"],
   data() {
     return {
       isWoodDisabled: false,
@@ -53,6 +55,7 @@ export default {
   },
   methods: {
     gather(resource, amount) {
+      this.$emit("gatherResource");
       this.gatherResources(resource, amount);
 
       //Disable gather button for each resource after click

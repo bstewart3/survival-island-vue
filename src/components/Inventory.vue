@@ -9,11 +9,13 @@
       <div class="toolTracker">
         <ToolTracker />
       </div>
-      <div class="healthTracker">
-        <HealthTracker />
-      </div>
-      <div class="healPlayer">
-        <HealPlayer />
+      <div>
+        <div class="healthTracker">
+          <HealthTracker />
+        </div>
+        <div class="healPlayer">
+          <HealPlayer />
+        </div>
       </div>
     </div>
   </transition-group>
@@ -25,6 +27,7 @@ import HealthTracker from "../components/HealthTracker.vue";
 import HealPlayer from "../components/HealPlayer.vue";
 import ToolTracker from "../components/ToolTracker.vue";
 import SurvivorHandler from "../components/SurvivorHandler.vue";
+import { useMultiPlayer } from "../stores/useMultiPlayer";
 export default {
   components: {
     ResourceCounter,
@@ -37,6 +40,15 @@ export default {
     return {
       isIntroComplete: false,
     };
+  },
+  setup() {
+    const { multiplayer } = useMultiPlayer();
+    return { multiplayer };
+  },
+  computed: {
+    playerJoined() {
+      return this.multiplayer.playerJoined;
+    },
   },
   mounted() {
     let intervalId = setInterval(() => {
