@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav>
+    <nav class="nav">
       <router-link to="/">Home</router-link>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/register">Register</router-link>
+      <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
+      <router-link v-if="!isLoggedIn" to="/register">Register</router-link>
       <router-link to="/game">Game</router-link>
       <router-link to="/multiplayer">Multiplayer</router-link>
       <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
@@ -50,6 +50,10 @@ const handleSignOut = () => {
   margin-top: 60px;
   height: 100%;
 }
+html {
+  width: 100%;
+  overflow: hidden;
+}
 .healthTracker {
   display: flex;
 
@@ -73,6 +77,7 @@ const handleSignOut = () => {
   flex-direction: row;
 
   justify-content: center;
+  margin-top: 2rem;
 }
 .introMessage {
   display: flex;
@@ -84,6 +89,24 @@ const handleSignOut = () => {
 
   align-items: flex-start;
   padding: 1.5rem;
+}
+
+nav {
+  display: flex;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px;
+  background-color: #333;
+  color: #000000;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 10px;
 }
 </style>
 
