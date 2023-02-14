@@ -41,4 +41,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* .babylonScene {
+  position: fixed;
+} */
+</style>

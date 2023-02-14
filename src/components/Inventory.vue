@@ -54,7 +54,7 @@ export default {
     let intervalId = setInterval(() => {
       this.isIntroComplete = true;
       clearInterval(intervalId);
-    }, 13500);
+    }, 1500);
   },
 };
 </script>
@@ -64,7 +64,7 @@ export default {
   position: fixed;
   top: 10rem;
 
-  margin-left: 2rem;
+  margin-left: 4rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;

@@ -1,51 +1,61 @@
 <template>
-  <div class="splash-screen">
-    <div class="splash-text">
-      <h1>Welcome to Survival island</h1>
-      <h2>Explore at your own risk..</h2>
-    </div>
-    <div class="splash-image">
-      <img
-        src="../assets/survival-island.jpg"
-        alt="Survival Island Splash"
-        class="islandImage"
-      />
+  <div class="splash-container">
+    <div class="splash-screen">
+      <div class="splash-text">
+        <h1>Welcome to Survival Island</h1>
+        <h2>Explore at your own risk..</h2>
+
+        <router-link to="/game"
+          ><button class="landing-button">
+            Explore The Island
+          </button></router-link
+        >
+      </div>
+      <div class="splash-image">
+        <img
+          src="../assets/isometric-island.png"
+          alt="Survival Island Splash"
+          class="islandImage"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import survivalIsland from "../assets/survival-island.jpg";
-
 export default {};
 </script>
 
-<style>
-html,
-body {
-  margin: 0;
-  height: 100vh;
+<style scoped>
+.splash-container {
+  height: 100%;
+  width: 100%;
 }
-
 .splash-screen {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   height: 100vh;
+  width: 100vw;
 }
 
 .splash-text {
   display: flex;
+
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  color: aliceblue;
+  text-shadow: 2px 2px 4px #464141;
+  margin-bottom: 5rem;
 }
 
 .splash-image {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 10px;
 }
 
 @media (max-width: 768px) {
@@ -55,7 +65,26 @@ body {
 }
 
 .islandImage {
+  position: absolute;
+  right: 10%;
+  bottom: 22%;
   width: 600px;
   height: 400px;
+  border-radius: 5%;
+}
+
+.landing-button {
+  padding: 8px 16px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.landing-button:hover {
+  background-color: dimgrey;
+  color: aliceblue;
+  transition: all 0.7s;
+  transition-timing-function: ease-out;
 }
 </style>

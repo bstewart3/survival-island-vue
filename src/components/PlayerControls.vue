@@ -4,27 +4,23 @@
       <div class="controls-header">
         <div>What would you like to do?</div>
         <div class="action-buttons">
-          <button
+          <Button
             v-if="!isGathering || !isBuilding || !isExploring"
             @click="isCurrentlyGathering"
-            class="gather-button"
-          >
-            Gather
-          </button>
-          <button
+            buttonText="Gather"
+          />
+
+          <Button
             v-if="!isGathering || !isBuilding || !isExploring"
             @click="isCurrentlyExploring"
-            class="explore-button"
-          >
-            Explore
-          </button>
-          <button
+            buttonText="Explore"
+          />
+
+          <Button
             v-if="!isGathering || !isBuilding || !isExploring"
             @click="isCurrentlyBuilding"
-            class="build-button"
-          >
-            Build
-          </button>
+            buttonText="Build"
+          />
         </div>
       </div>
       <transition-group name="buildButtonGroup">
@@ -45,6 +41,7 @@
 </template>
 
 <script>
+import Button from "./Button.vue";
 import ToolCreator from "./ToolCreator.vue";
 import BuildShelter from "./BuildShelter.vue";
 import GatherResources from "./GatherResources.vue";
@@ -59,6 +56,7 @@ export default {
     GatherResources,
     Exploration,
     HealPlayer,
+    Button,
   },
 
   data() {
@@ -75,7 +73,7 @@ export default {
     let intervalId = setInterval(() => {
       this.introIsFinished = true;
       clearInterval(intervalId);
-    }, 12500);
+    }, 1500);
   },
 
   methods: {
@@ -133,7 +131,7 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-
+/* 
 .gather-button,
 .explore-button,
 .build-button {
@@ -141,6 +139,15 @@ export default {
   border: 1px solid gray;
   border-radius: 4px;
   background-color: white;
+  cursor: pointer;
+} */
+.gather-button:hover,
+.explore-button:hover,
+.build-button:hover {
+  background-color: dimgrey;
+  color: aliceblue;
+  transition: all 0.7s;
+  transition-timing-function: ease-out;
 }
 
 .gather-container,

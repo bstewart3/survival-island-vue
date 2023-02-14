@@ -7,6 +7,7 @@
     </div>
 
     <div v-if="playerLeft">Player Left Game</div>
+
     <button v-if="playerLeft" @click="reloadPage">Close</button>
     <div v-if="gameEnded">
       <h3>Game Over</h3>
@@ -24,7 +25,7 @@
         <button @click="joinedGame = !joinedGame">Cancel</button>
       </div>
 
-      <div v-if="!joinedGame">
+      <div class="matchMaking" v-if="!joinedGame">
         <div v-if="lookingForPlayers">Looking for players...</div>
         <button
           v-if="!lookingForPlayers && !showOpenGames"
@@ -46,16 +47,16 @@
         >
           Show Open Games
         </button>
-        <button v-if="showOpenGames" @click="showOpenGames = !showOpenGames">
-          Close
-        </button>
-        <button v-if="showOpenGames" @click="loadGames">Refresh</button>
+        <div class="openGames" v-if="showOpenGames">
+          <button @click="showOpenGames = !showOpenGames">Close</button>
+          <button @click="loadGames">Refresh</button>
 
-        <div v-if="showOpenGames">
-          <div>Games To Join:</div>
-          <div v-for="(game, index) in openGamesArray" :key="index">
-            <p>Game: {{ game.gameId }}</p>
-            <button @click="joinGame(game.gameId)">Join</button>
+          <div v-if="showOpenGames">
+            <div>Games To Join:</div>
+            <div v-for="(game, index) in openGamesArray" :key="index">
+              <p>Game: {{ game.gameId }}</p>
+              <button @click="joinGame(game.gameId)">Join</button>
+            </div>
           </div>
         </div>
       </div>
@@ -77,8 +78,6 @@ import {
   updateDoc,
   onSnapshot,
   limit,
-  deleteDoc,
-  arrayUnion,
 } from "firebase/firestore";
 import { useLogin } from "../stores/login";
 import { useGame } from "../stores/useGame";
@@ -246,37 +245,10 @@ export default {
       this.openGamesArray = [];
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-
         this.openGamesArray.push({ gameId: doc.id, gameData: doc.data() });
-        // console.log(this.openGamesArray);
       });
     },
-    // async getPlayerScore() {
-    //   const docRef = doc(db, "games", this.currentGame);
-    //   const docSnap = await getDoc(docRef);
-    //   if (docSnap.exists()) {
-    //     this.player1Score = docSnap.data().player1Score;
-    //     this.player2Score = docSnap.data().player2Score;
-    //     console.log("Document data:", docSnap.data());
-    //   } else {
-    //     // doc.data() will be undefined in this case
-    //     console.log("No such document!");
-    //   }
-    // },
   },
-  // async unmounted() {
-  //   const gameRef = doc(db, "games", this.currentGame);
-
-  //   await updateDoc(gameRef, {
-  //     completed: true,
-  //   });
-
-  //   this.lookingForPlayers = false;
-  //   this.joinedGame = false;
-  //   this.showOpenGames = false;
-  //   this.playerLeftGame();
-  //   this.currentGame = "";
-  // },
 };
 </script>
 
@@ -285,5 +257,25 @@ html,
 body {
   margin: 0;
   height: 100vh;
+}
+
+button {
+  padding: 8px 16px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: dimgrey;
+  color: aliceblue;
+  transition: all 0.4s;
+  transition-timing-function: ease-out;
+}
+.matchMaking {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

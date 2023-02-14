@@ -9,9 +9,9 @@ const router = createRouter({
     {
       path: "/game",
       component: () => import("../pages/Game.vue"),
-      meta: {
-        requiresAuth: true,
-      },
+      // meta: {
+      //   requiresAuth: true,
+      // },
     },
     {
       path: "/multiplayer",
@@ -41,7 +41,7 @@ router.beforeEach(async (to, from, next) => {
     if (await getCurrentUser()) {
       next();
     } else {
-      alert("you dont have access");
+      alert("Please login to continue");
       next("/");
     }
   } else {
