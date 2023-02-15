@@ -1,6 +1,7 @@
 import {
   Color3,
   Color4,
+  CubeTexture,
   Engine,
   FreeCamera,
   FresnelParameters,
@@ -33,12 +34,21 @@ const myScene = {
 
     const ground = MeshBuilder.CreateGround(
       "ground",
-      { width: 200, height: 200 },
+      { width: 1000, height: 1000 },
       scene
     );
     ground.material = new StandardMaterial("groundMaterial", scene);
     ground.material.diffuseColor = new Color3(0.03, 0.48, 0.79, 0.83);
     ground.position.y = -14.1;
+
+    const envTex = CubeTexture.CreateFromPrefilteredData(
+      "./environment/sky.env",
+      scene
+    );
+
+    scene.environmentTexture = envTex;
+
+    scene.createDefaultSkybox(envTex, true);
 
     const island = MeshBuilder.CreateSphere(
       "island",
