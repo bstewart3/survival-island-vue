@@ -73,7 +73,7 @@ export default {
     let intervalId = setInterval(() => {
       this.introIsFinished = true;
       clearInterval(intervalId);
-    }, 1500);
+    }, 12500);
   },
 
   methods: {

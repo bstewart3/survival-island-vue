@@ -54,7 +54,7 @@ export default {
     let intervalId = setInterval(() => {
       this.isIntroComplete = true;
       clearInterval(intervalId);
-    }, 1500);
+    }, 13500);
   },
 };
 </script>
@@ -69,7 +69,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #e6e6e6;
+  background-color: #f4f4f4;
 
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

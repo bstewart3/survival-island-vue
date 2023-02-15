@@ -5,9 +5,7 @@
       <router-link active-class="active" v-if="!isLoggedIn" to="/login"
         >Login</router-link
       >
-      <router-link active-class="active" v-if="!isLoggedIn" to="/register"
-        >Register</router-link
-      >
+
       <router-link active-class="active" to="/game">Game</router-link>
       <router-link active-class="active" to="/multiplayer"
         >Multiplayer</router-link
@@ -56,8 +54,6 @@ const handleSignOut = () => {
   color: #2c3e50;
   padding-left: 0;
 
-  height: 100vh;
-  width: 100vw;
   /* background-color: #223848; */
 }
 html {

@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
       next();
     } else {
       alert("Please login to continue");
-      next("/");
+      next("/login");
     }
   } else {
     next();

@@ -27,6 +27,8 @@ export default {};
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Quintessential&display=swap");
+
 .splash-screen {
   display: grid;
   position: fixed;
@@ -52,7 +54,10 @@ export default {};
   text-align: center;
   color: aliceblue;
   text-shadow: 2px 2px 4px #464141;
-  margin-bottom: 5rem;
+}
+.splash-text h1 {
+  font-family: "Quintessential", cursive;
+  font-size: 50px;
 }
 
 .splash-image {
@@ -65,6 +70,9 @@ export default {};
 @media (max-width: 768px) {
   .splash-screen {
     grid-template-columns: 1fr;
+  }
+  .islandImage {
+    display: none;
   }
 }
 

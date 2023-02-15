@@ -8,10 +8,12 @@ import {
   MeshBuilder,
   ParticleSystem,
   Scene,
+  SceneLoader,
   StandardMaterial,
   Texture,
   Vector3,
 } from "@babylonjs/core";
+import "@babylonjs/loaders";
 import Rock from "../assets/Rock.jpg";
 import sand from "../assets/sand.jpg";
 const myScene = {
@@ -23,28 +25,11 @@ const myScene = {
     myScene.engine = engine;
     myScene.scene = scene;
 
-    const camera = new FreeCamera("camera1", new Vector3(0, 5, -25), scene);
+    const camera = new FreeCamera("camera1", new Vector3(-10, 5, -40), scene);
     camera.setTarget(Vector3.Zero());
     camera.attachControl(canvas, true);
 
     new HemisphericLight("light", Vector3.Up(), scene);
-
-    // const boxRed = MeshBuilder.CreateBox("box-red", { size: 1 }, scene);
-    // const materialRed = new StandardMaterial("box-red-material", scene);
-    // materialRed.diffuseColor = Color3.Red();
-    // boxRed.material = materialRed;
-    // boxRed.position.x = -2;
-
-    // const boxBlue = MeshBuilder.CreateBox("box-yellow", { size: 1 }, scene);
-    // const materialYellow = new StandardMaterial("box-blue-material", scene);
-    // materialYellow.diffuseColor = Color3.Yellow();
-    // boxBlue.material = materialYellow;
-
-    // const boxGreen = MeshBuilder.CreateBox("box-green", { size: 1 }, scene);
-    // const materialGreen = new StandardMaterial("box-green-material", scene);
-    // materialGreen.diffuseColor = Color3.Green();
-    // boxGreen.material = materialGreen;
-    // boxGreen.position.x = 2;
 
     const ground = MeshBuilder.CreateGround(
       "ground",
@@ -237,6 +222,8 @@ const myScene = {
     stickTemplate.isVisible = false;
     stickTemplate.material = stickMaterial;
 
+    this.createTree();
+
     window.addEventListener("click", function () {
       smokeSystem.start();
       fireSystem.start();
@@ -254,6 +241,29 @@ const myScene = {
     if (mesh) {
       mesh.position = new Vector3(x, y, z);
     }
+  },
+
+  createTree: function () {
+    SceneLoader.ImportMesh(
+      "",
+      "./models/",
+      "coconut-tree.babylon",
+      this.scene,
+      (meshes) => {
+        console.log(meshes);
+        meshes[1].scaling.z = 0.1;
+        meshes[1].scaling.y = 0.1;
+        meshes[1].scaling.x = 0.2;
+        meshes[1].position.x = 80;
+        meshes[1].position.y = 5;
+        meshes[1].position.z = -1;
+
+        const tree2 = meshes[1].clone("tree2");
+        tree2.position.x = 20;
+        tree2.position.z = 40;
+        tree2.rotation.x = 2;
+      }
+    );
   },
   setStick: function (name) {
     const mesh = this.scene.getMeshByName(name);
