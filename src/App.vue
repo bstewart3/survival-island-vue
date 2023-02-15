@@ -14,11 +14,7 @@
       >
       <Button @click="handleSignOut" v-if="isLoggedIn" buttonText="Sign Out" />
     </nav>
-    <router-view v-slot="{ Component }">
-      <transition name="slide-right">
-        <component :is="Component" />
-      </transition>
-    </router-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -68,11 +64,12 @@ html {
   overflow: hidden;
   background-color: aliceblue;
 }
-/* html,
+html,
 body {
   margin: 0;
   height: 100vh;
-} */
+  width: 100%;
+}
 .healthTracker {
   display: flex;
 
@@ -115,6 +112,7 @@ body {
 }
 
 nav {
+  z-index: 100;
   display: flex;
   position: fixed;
   top: 0;

@@ -253,12 +253,6 @@ export default {
 </script>
 
 <style>
-html,
-body {
-  margin: 0;
-  height: 100vh;
-}
-
 button {
   padding: 8px 16px;
   border: 1px solid gray;
@@ -275,6 +269,7 @@ button:hover {
 }
 .matchMaking {
   display: flex;
+  margin-top: 6rem;
   align-items: center;
   justify-content: center;
 }

@@ -5,8 +5,8 @@
         <h1>Welcome to Survival Island</h1>
         <h2>Explore at your own risk..</h2>
 
-        <router-link to="/game"
-          ><button class="landing-button">
+        <router-link to="/game">
+          <button class="landing-button">
             Explore The Island
           </button></router-link
         >
@@ -27,16 +27,20 @@ export default {};
 </script>
 
 <style scoped>
-.splash-container {
-  height: 100%;
-  width: 100%;
-}
 .splash-screen {
   display: grid;
+  position: fixed;
+  top: 0;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   height: 100vh;
   width: 100vw;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(
+    0deg,
+    rgba(34, 193, 195, 1) 0%,
+    rgba(253, 187, 45, 1) 100%
+  );
 }
 
 .splash-text {
