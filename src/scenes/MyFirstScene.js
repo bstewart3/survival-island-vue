@@ -15,8 +15,9 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import "@babylonjs/loaders";
-import Rock from "../assets/Rock.jpg";
+import Rock from "../assets/Rock2.jpg";
 import sand from "../assets/sand.jpg";
+
 const myScene = {
   engine: null,
   scene: null,
@@ -64,7 +65,21 @@ const myScene = {
       scene
     );
     island2.position.y = -55;
-    island2.position.x = -3;
+    island2.position.x = -2;
+
+    const island3 = MeshBuilder.CreateSphere(
+      "island",
+      { diameter: 500, segments: 15 },
+      scene
+    );
+    island3.position.y = -245;
+    island3.position.x = -15;
+    island3.position.z = 100;
+
+    const island4 = island3.clone("island4");
+    island4.position.y = -245;
+    island4.position.x = 150;
+    island4.position.z = 65;
 
     const groundMaterial = new StandardMaterial("ground", scene);
     groundMaterial.diffuseTexture = new Texture(sand, scene);
@@ -73,6 +88,8 @@ const myScene = {
     groundMaterial.specularColor = new Color3(0, 0, 0);
     island.material = groundMaterial;
     island2.material = groundMaterial;
+    island3.material = groundMaterial;
+    island4.material = groundMaterial;
 
     const ring = MeshBuilder.CreateTorus(
       "ring",
@@ -167,7 +184,7 @@ const myScene = {
     fireSystem.minSize = 1;
     fireSystem.maxSize = 2;
     fireSystem.minLifeTime = 1;
-    fireSystem.maxLifeTime = 40;
+    fireSystem.maxLifeTime = 10;
     fireSystem.emitRate = 300;
     fireSystem.blendMode = ParticleSystem.BLENDMODE_ONEONE;
     fireSystem.gravity = new Vector3(0, 0, 0);

@@ -1,6 +1,6 @@
 <template>
   <div class="babylonScene" v-if="!introIsFinished">
-    <canvas ref="bjsCanvas" width="700" height="400" />
+    <canvas ref="bjsCanvas" width="800" height="450" />
   </div>
 </template>
 
