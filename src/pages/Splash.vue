@@ -28,6 +28,8 @@ export default {};
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Quintessential&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Island+Moments&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ceviche+One&display=swap");
 
 .splash-screen {
   display: grid;
@@ -58,6 +60,8 @@ export default {};
 .splash-text h1 {
   font-family: "Quintessential", cursive;
   font-size: 50px;
+  letter-spacing: 3px;
+  text-shadow: 4px 4px 4px #353131;
 }
 
 .splash-image {
