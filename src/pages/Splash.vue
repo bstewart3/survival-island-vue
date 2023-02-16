@@ -98,7 +98,7 @@ export default {};
 }
 
 .landing-button:hover {
-  background-color: dimgrey;
+  background-color: rgba(105, 105, 105, 0.312);
   color: aliceblue;
   transition: all 0.7s;
   transition-timing-function: ease-out;
